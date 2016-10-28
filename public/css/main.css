@@ -1,0 +1,48 @@
+
+body {
+    padding-top: 70px;
+}
+
+.add-on .input-group-btn > .btn {
+    border-left-width:0;left:-2px;
+}
+
+.add-on .form-control:focus {
+    box-shadow:none;
+    -webkit-box-shadow:none; 
+    border-color:#cccccc; 
+}
+
+.form-group {
+    margin-bottom: 5px;
+}
+
+.help-block {
+    margin-bottom: 5px
+}
+
+.radiogn {
+    margin-bottom: 10px;
+}
+
+.last {
+    margin-bottom: 15px;
+}
+
+.table {
+    table-layout: fixed;
+}
+
+td {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.well-green {
+    background-color:#dff0d8;
+    border-color:#d6e9c6
+}
+
+#iconError {
+    font-size: 50px;
+}
