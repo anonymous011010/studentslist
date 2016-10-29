@@ -26,12 +26,16 @@ class Logger {
     }
 
     /**
-    * Устанавливает или изменяет файл логов
-    * @param string $logFile Путь к файлу
-    */
+     * Устанавливает или изменяет файл логов
+     * @param string $logFile Путь к файлу
+     */
     public function setLogFile($logFile) {
         if (!\file_exists($logFile)) {
-            throw new \RuntimeException('Log file is not exists');
+            if (!\touch($logFile)) {
+                throw new \RuntimeException('Unable to create the log file');
+            } else {
+                $this->logFile = $logFile;
+            }
         } elseif (!\is_writable($logFile)) {
             throw new \RuntimeException('Log file is not writable');
         } else {
@@ -40,14 +44,14 @@ class Logger {
     }
 
     /**
-    * Передает логеру сообщение об исключении или ошибке
-    * @param string $type Тип исключения/ошибки
-    * @param string $message Сообщение исключения/ошибки
-    * @param string $file Файл в котором было 'выброшено' исключение или произошла ошибка
-    * @param string $line Строка в которой было 'выброшено' исключение или произошла ошибка
-    */
+     * Передает логеру сообщение об исключении или ошибке
+     * @param string $type Тип исключения/ошибки
+     * @param string $message Сообщение исключения/ошибки
+     * @param string $file Файл в котором было 'выброшено' исключение или произошла ошибка
+     * @param string $line Строка в которой было 'выброшено' исключение или произошла ошибка
+     */
     public function log($type, $message, $file, $line) {
-        $string = date('r',time()) . " {$type}: " . " {$message} " . "In file \"{$file}\" " . "on line {$line}" . "\n";
+        $string = date('r', time()) . " {$type}: " . " {$message} " . "In file \"{$file}\" " . "on line {$line}" . "\n";
         $this->write($string);
     }
 

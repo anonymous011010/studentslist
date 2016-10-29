@@ -42,7 +42,7 @@ class IndexController extends Controller {
         $studentsNum = $gateway->countStudents();
         $offset = ($page - 1) * $limit;
 
-        if ($offset >= $studentsNum) {
+        if ($offset > $studentsNum) {
             $ErrorController = new \Studentslist\Controllers\ErrorController;
             $ErrorController->error404();
         }
