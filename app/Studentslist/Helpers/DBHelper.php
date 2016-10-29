@@ -5,7 +5,7 @@ namespace Studentslist\Helpers;
 use Studentslist\Models\Student;
 
 /**
- * Класс для помощи в формировании в работе с базой данных
+ * Хелпер для помощи в работе с базой данных
  */
 class DBHelper {
 
@@ -19,7 +19,7 @@ class DBHelper {
     }
 
     /**
-     * Получение значения колонки в ORDER BY
+     * Возвращает безопасное значение ORDER BY
      * @param string $order имя колонки
      * @return string Значение колонки в ORDER BY
      */
@@ -44,7 +44,7 @@ class DBHelper {
     }
 
     /**
-     * Получения значения порядка
+     * Возвращает безопасное значени порядка сортирования
      * @param string $sort DESC или ASC
      * @return string DESC или ASC в зависимости от переданных параметров
      */
