@@ -29,7 +29,6 @@ class Database {
         return self::$instance;
     }
 
-
     private function parseConfig() {
         return \parse_ini_file("../config.ini");
     }

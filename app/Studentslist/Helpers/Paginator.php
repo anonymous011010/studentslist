@@ -23,7 +23,6 @@ class Paginator {
 
     public function __construct(
     $totalEntries, $entriesPerPage, $currentPage, $maxVisiblePages, $host, $controller, $action, $order, $sort) {
-
         $this->totalEntries = $totalEntries;
         $this->entriesPerPage = $entriesPerPage;
         $this->currentPage = $currentPage;

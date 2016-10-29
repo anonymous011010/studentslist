@@ -3,6 +3,7 @@
 namespace Studentslist\Models;
 
 use Studentslist\Models\StudentDataGateway;
+use Studentslist\Models\Student;
 
 /**
  * Класс, выполняющий валидацию данных.
@@ -14,7 +15,12 @@ class StudentValidator {
     public function __construct(StudentDataGateway $gateway) {
         $this->gateway = $gateway;
     }
-
+    
+    /**
+     * Проводит валидацию данных с объекта Student и в случае возникновения ошибок добавляет их в массив.
+     * @param Student $student Объект с информацией о студенте
+     * @return $array Массив с ошибками
+     */
     public function validate(Student $student) {
         $id = $student->id ? $student->id : 0;
         $errors = [];
