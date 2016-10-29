@@ -13,6 +13,8 @@ class Handler {
         } catch (Exception $e) {
             if (APP_DEBUG) {
                 echo $e->__toString();
+            } else {
+                $this->shutdownApp();
             }
         }
         $this->errorsArray = $this->getErrorsArray();
