@@ -8,7 +8,7 @@ use Studentslist\Core\Router;
 
 define('APP_DEBUG', false); // Устанавливает режим дебага приложения
 define('ENTRIES_PER_PAGE', 50); // Количество выводимых элементов на одну страницу
-define('APP_URL_ADDR', "http://" . filter_input(INPUT_SERVER, 'HTTP_HOST')); // URL-адрес приложения
+define('APP_URL_ADDR', "http://" . filter_var(idn_to_ascii($_SERVER['HTTP_HOST']),FILTER_SANITIZE_URL)); // URL-адрес приложения
 define('MAX_VISIBLE_PAGES', 5); // Максимальное количество отображаемых страниц в пагинации (не считая первую и последнюю страницу)
 
 $handler = new Handler;
