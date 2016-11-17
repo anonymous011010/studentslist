@@ -7,7 +7,7 @@ require 'header.php';
         <div class="row">
             <?php if (isset($data['CSRF-Error'])) : ?>
                 <div class="alert alert-warning">
-                    <strong>Запрос отклонен.</strong> Возможна попытка CSRF-атаки, пожалуйста, проверьте, работают ли cookie файлы в вашем браузере, и повторите попытку снова.
+                    <strong>Запрос отклонен.</strong> Пожалуйста, проверьте, работают ли cookie файлы в вашем браузере, и повторите попытку снова.
                 </div>
             <?php endif; ?>
             <?php if (isset($data['fail'])) : ?>

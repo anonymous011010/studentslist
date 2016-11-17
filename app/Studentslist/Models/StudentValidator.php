@@ -35,7 +35,7 @@ class StudentValidator {
         ];
 
         foreach ($results as $key => $value) {
-            if ($value !== true) {
+            if ($value !== '') {
                 $errors[$key] = $value;
             }
         }
@@ -47,7 +47,7 @@ class StudentValidator {
      * Валидация E-mail студента
      * @param string $email E-mail студента
      * @param integer $id ID студента
-     * @return boolean|string TRUE или строка с ошибкой
+     * @return string пустая строка или строка с ошибкой
      */
     public function checkEmail($email, $id) {
         $regExp = '/^(\S[^@])+@(\S[^@])+$/ui';
@@ -57,22 +57,22 @@ class StudentValidator {
             if ($this->gateway->getEmailOwnerId($email) != $id) {
                 return 'E-mail уже занят.';
             } else {
-                return true;
+                return '';
             }
         } else {
-            return true;
+            return '';
         }
     }
 
     /**
      * Валидация имени студента
      * @param string $fname Имя студента
-     * @return boolean|string TRUE или строка с ошибкой
+     * @return string пустая строка или строка с ошибкой
      */
     public function checkFname($fname) {
-        $regExp = "/^([а-яё]+[-\\s']?){1,32}$/ui";
+        $regExp = "/^[-'\sа-яё]{1,32}$/ui";
         if (\preg_match_all($regExp, $fname)) {
-            return true;
+            return '';
         } else {
             return 'Допускаются только буквы русского алфавита, дефис, апостроф и пробел. От 1 до 32 символов.';
         }
@@ -81,12 +81,12 @@ class StudentValidator {
     /**
      * Валидация фамилии студента
      * @param string $sname Фамилия студента
-     * @return boolean|string TRUE или строка с ошибкой
+     * @return string пустая строка или строка с ошибкой
      */
     public function checkSname($sname) {
-        $regExp = "/^([а-яё]+[-\\s']?){1,32}$/ui";
+        $regExp = "/^[-'\sа-яё]{1,32}$/ui";
         if (\preg_match_all($regExp, $sname)) {
-            return true;
+            return '';
         } else {
             return 'Допускаются только буквы русского алфавита, дефис, апостроф и пробел. От 1 до 32 символов.';
         }
@@ -95,11 +95,11 @@ class StudentValidator {
     /**
      * Валилация пола студента
      * @param string $gender Пол студента
-     * @return boolean|string TRUE или строка с ошибкой
+     * @return string пустая строка или строка с ошибкой
      */
     public function checkGender($gender) {
         if ($gender === 'male' || $gender === 'female') {
-            return true;
+            return '';
         } else {
             return 'Это обязательное поле.';
         }
@@ -108,12 +108,12 @@ class StudentValidator {
     /**
      * Валидация группы студента
      * @param string $group Группа студента
-     * @return boolean|string TRUE или строка с ошибкой
+     * @return string пустая строка или строка с ошибкой
      */
     public function checkGroup($group) {
         $regExp = '/^[а-яё0-9]{2,5}$/ui';
         if (\preg_match_all($regExp, $group)) {
-            return true;
+            return '';
         } else {
             return 'Допускаются только буквы русского алфавита и цифры. От 2 до 5 символов.';
         }
@@ -122,11 +122,11 @@ class StudentValidator {
     /**
      * Валидация суммарного бала ЕГЭ студента
      * @param string $examScore Суммарный бал ЕГЭ
-     * @return boolean|string TRUE или строка с ошибкой
+     * @return string пустая строка или строка с ошибкой
      */
     public function checkExamScore($examScore) {
         if ($examScore > 0 && $examScore <= 300) {
-            return true;
+            return '';
         } else {
             return 'Введите корректный общий бал ЕГЭ.';
         }
@@ -135,11 +135,11 @@ class StudentValidator {
     /**
      * Валидация года рождения студента
      * @param integer $byear Год рождения студента
-     * @return boolean|string TRUE или строка с ошибкой
+     * @return string пустая строка или строка с ошибкой
      */
     public function checkByear($byear) {
         if ($byear >= 1905 && $byear <= 2004) {
-            return true;
+            return '';
         } else {
             return 'Введите корректный год рождения.';
         }
@@ -148,11 +148,11 @@ class StudentValidator {
     /**
      * Валидация территориальной принадлежности студента
      * @param boolean $local Территориальная принадлежность студента
-     * @return boolean|string TRUE или строка с ошибкой
+     * @return string пустая строка или строка с ошибкой
      */
     public function checkLocal($local) {
         if ($local === 'true' or $local === 'false') {
-            return true;
+            return '';
         } else {
             return 'Это обязательное поле.';
         }

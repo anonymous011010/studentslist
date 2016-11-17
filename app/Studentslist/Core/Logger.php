@@ -16,7 +16,9 @@ class Logger {
         $this->setLogFile($logFile);
     }
 
-    private function __clone() {}
+    private function __clone() {
+        
+    }
 
     public static function getInstance() {
         if (empty(self::$instance)) {
@@ -29,15 +31,15 @@ class Logger {
      * Устанавливает или изменяет файл логов
      * @param string $logFile Путь к файлу
      */
-    public function setLogFile($logFile) {
+    private function setLogFile($logFile) {
         if (!\file_exists($logFile)) {
             if (!\touch($logFile)) {
-                throw new \RuntimeException('Unable to create the log file');
+                throw new \RuntimeException('Unable to create' . $logFile);
             } else {
                 $this->logFile = $logFile;
             }
         } elseif (!\is_writable($logFile)) {
-            throw new \RuntimeException('Log file is not writable');
+            throw new \RuntimeException('Log file ' . $logFile . ' is not writable');
         } else {
             $this->logFile = $logFile;
         }

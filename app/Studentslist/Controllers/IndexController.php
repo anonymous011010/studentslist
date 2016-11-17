@@ -7,7 +7,6 @@ use Studentslist\Core\Auth;
 use Studentslist\Helpers\NavHelper;
 use Studentslist\Helpers\TableHelper;
 use Studentslist\Helpers\Paginator;
-use Studentslist\Helpers\DBHelper;
 
 /**
  * Контроллер, реализующий список всех студентов и поиск студентов
@@ -24,9 +23,8 @@ class IndexController extends Controller {
         $page = (int) \filter_var($page, \FILTER_SANITIZE_NUMBER_INT);
         $page = ((!$page) || ($page < 1)) ? 1 : $page;
 
-        $gateway = self::DbGateway();
+        $gateway = $this->DbGateway();
 
-        $DBHelper = new DBHelper;
         
         $token = (isset($_COOKIE['authToken'])) ? \filter_input(\INPUT_COOKIE, 'authToken', \FILTER_SANITIZE_STRING) : '';
         $auth = new Auth($gateway);
@@ -47,8 +45,8 @@ class IndexController extends Controller {
             $ErrorController->error404();
         }
 
-        $order = (isset($_GET['order'])) ? $DBHelper->getOrder(\filter_input(\INPUT_GET, 'order', \FILTER_SANITIZE_STRING)) : 'examScore';
-        $sort = (isset($_GET['sort'])) ? $DBHelper->getSort(\filter_input(\INPUT_GET, 'sort', \FILTER_SANITIZE_STRING)) : 'DESC';
+        $order = (isset($_GET['order'])) ? $gateway->getOrder(\filter_input(\INPUT_GET, 'order')) : 'examScore';
+        $sort = (isset($_GET['sort'])) ? $gateway->getSort(\filter_input(\INPUT_GET, 'sort')) : 'DESC';
 
         $data = [
             'studentsNum' => $studentsNum,
@@ -59,7 +57,7 @@ class IndexController extends Controller {
         $navHelper = new NavHelper($data['host'], $form, 'index');
         $tableHelper = new TableHelper($data['host'], 'index', 'all', $page, $order, $sort);
         $paginator = new Paginator($data['studentsNum'], $limit, $page, \MAX_VISIBLE_PAGES, $data['host'], 'index', 'all', $order, $sort);
-        self::renderViewTable('index', $navHelper, $tableHelper, $paginator, $data);
+        $this->renderViewTable('index', $navHelper, $tableHelper, $paginator, $data);
     }
 
     /**
@@ -70,7 +68,7 @@ class IndexController extends Controller {
 
         $data['host'] = \APP_URL_ADDR;
         $data['title'] = "Поиск студентов";
-        $gateway = self::DbGateway();
+        $gateway = $this->DbGateway();
                
         $token = (isset($_COOKIE['authToken'])) ? \filter_input(\INPUT_COOKIE, 'authToken', \FILTER_SANITIZE_STRING) : '';
         $auth = new Auth($gateway);
@@ -82,17 +80,16 @@ class IndexController extends Controller {
         }
 
         $navHelper = new NavHelper($data['host'], $form);
-        $DBHelper = new DBHelper;
 
         if (isset($_GET['q']) && !empty($_GET['q'])) {
 
             $page = (int) \filter_var($page, \FILTER_SANITIZE_NUMBER_INT);
             $page = ((!$page) || ($page < 1)) ? 1 : $page;
 
-            $search = $DBHelper->fixSearchQuery(\filter_input(\INPUT_GET, 'q'));
+            $search = $gateway->fixSearchQuery(\strval(\trim(\filter_input(\INPUT_GET, 'q'))));
 
-            $order = (isset($_GET['order'])) ? $DBHelper->getOrder(\filter_input(\INPUT_GET, 'order', \FILTER_SANITIZE_STRING)) : 'examScore';
-            $sort = (isset($_GET['sort'])) ? $DBHelper->getSort(\filter_input(\INPUT_GET, 'sort', \FILTER_SANITIZE_STRING)) : 'DESC';
+            $order = (isset($_GET['order'])) ? $gateway->getOrder($_GET['order']) : 'examScore';
+            $sort = (isset($_GET['sort'])) ? $gateway->getSort($_GET['sort']) : 'DESC';
 
 
             $limit = \ENTRIES_PER_PAGE;
@@ -115,9 +112,9 @@ class IndexController extends Controller {
             $tableHelper->searchQuery = $search;
             $paginator->searchQuery = $search;
 
-            self::renderViewTable('results', $navHelper, $tableHelper, $paginator, $data);
+            $this->renderViewTable('results', $navHelper, $tableHelper, $paginator, $data);
         } else {
-            self::renderView('results', $navHelper, $data);
+            $this->renderView('results', $navHelper, $data);
         }
     }
 

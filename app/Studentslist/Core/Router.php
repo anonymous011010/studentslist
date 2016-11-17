@@ -10,8 +10,8 @@ class Router {
     protected $controller = 'Index';
     protected $method = 'all';
     protected $params = [];
-
-    function __construct() {
+    
+    function run() {
         $url = $this->parseUrl();
         if (\class_exists('\Studentslist\\Controllers\\' . \ucfirst($url[0]) . 'Controller')) {
             $this->controller = \ucfirst($url[0]);
@@ -43,8 +43,8 @@ class Router {
 
     private function parseUrl() {
         if ($_SERVER['REQUEST_URI']) {
-            list($urlPath, ) = \explode('?', \filter_input(\INPUT_SERVER, 'REQUEST_URI', \FILTER_SANITIZE_URL));
-            return $url = \explode('/', \rtrim(\ltrim($urlPath, '/'), '/'));
+            $urlPath = parse_url(\filter_input(\INPUT_SERVER, 'REQUEST_URI', \FILTER_SANITIZE_URL), PHP_URL_PATH);
+            return \explode('/', trim($urlPath, '/'));
         }
     }
 

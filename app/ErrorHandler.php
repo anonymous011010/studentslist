@@ -2,7 +2,7 @@
 
 use Studentslist\Core\Logger;
 
-class Handler {
+class ErrorHandler {
 
     private $logger;
     private $errorsArray;
@@ -20,7 +20,7 @@ class Handler {
         $this->errorsArray = $this->getErrorsArray();
     }
 
-    public function exceptionHandler($exception) {
+    public function handleException($exception) {
         $this->logger->log(get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine());
 
         if (APP_DEBUG) {
@@ -30,7 +30,7 @@ class Handler {
         }
     }
 
-    public function errorHandler($errno, $errstr, $errfile, $errline) {
+    public function handleError($errno, $errstr, $errfile, $errline) {
 
         $errors = $this->errorsArray;
 
@@ -40,19 +40,17 @@ class Handler {
 
         if (APP_DEBUG) {
             $this->show($errtype, $errstr, $errfile, $errline);
+        }else{
+            $this->shutdownApp();
         }
     }
 
-    public function fatalErrorHandler() {
+    public function handleFatalError() {
 
         if (error_get_last() !== null) {
             $error = error_get_last();
 
-            if (in_array($error['type'], [E_ERROR, E_PARSE, E_COMPILE_ERROR, E_CORE_ERROR])) {
-                $this->shutdownApp();
-            }
-
-            $this->errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
+            $this->handleError($error['type'], $error['message'], $error['file'], $error['line']);
         }
     }
 

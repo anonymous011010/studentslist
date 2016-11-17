@@ -20,7 +20,7 @@
                 </ul>
                 <form role="search" class="navbar-form navbar-right" method="get" action="<?= $data['host'] ?>/index/search/">
                     <div class="input-group add-on">
-                        <input type="text" placeholder="Поиск" class="form-control" name="q" required value="<?= (isset($data['search'])) ? $data['search'] : ''; ?>">
+                        <input type="text" placeholder="Поиск" class="form-control" name="q" required value="<?= (isset($data['search'])) ? htmlentities($data['search'], ENT_QUOTES) : ''; ?>">
                         <div class="input-group-btn">
                             <button type="submit" class="btn btn-default" id="sbutton"><i class="glyphicon glyphicon-search"></i></button>
                         </div>

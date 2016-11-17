@@ -8,7 +8,7 @@ require 'header.php';
             <div class="alert alert-success">
                 <p><strong><?= $data['title'] ?></strong></p>
                 <p><a href="<?= $data['host'] ?>">Вернуться на главную страницу</a></p>
-                <p class="text-muted">Вы будете автоматически перемещены на главную страницу через 5 секунд</p>
+                <!-- <p class="text-muted">Вы будете автоматически перемещены на главную страницу через 5 секунд</p> -->
             </div>
         </div>
     </div>

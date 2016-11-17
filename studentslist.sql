@@ -35,7 +35,6 @@ CREATE TABLE `students` (
   `authToken` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `authToken_UNIQUE` (`authToken`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -9,7 +9,6 @@ use Studentslist\Models\StudentValidator;
 use Studentslist\Models\Student;
 use Studentslist\Helpers\NavHelper;
 use Studentslist\Helpers\TokenHelper;
-use Studentslist\Helpers\DBHelper;
 
 /**
  *  Контроллер, реализующий регистрацию студентов и редактирование информации зарегистрированных студента
@@ -23,8 +22,7 @@ class FormController extends Controller {
     public function edit() {
 
         $tokenHelper = new TokenHelper;
-        $DBHelper = new DBHelper;
-        $gateway = self::DbGateway();
+        $gateway = $this->DbGateway();
         $token = (isset($_COOKIE['authToken'])) ? \filter_input(\INPUT_COOKIE, 'authToken', \FILTER_SANITIZE_STRING) : '';
         $auth = new Auth($gateway);
 
@@ -32,7 +30,7 @@ class FormController extends Controller {
             $data['student'] = $gateway->getStudentByToken($token);
         } else {
             header('Location: ' . \APP_URL_ADDR . '/form/register');
-            die();
+            return;
         }
 
         $data['host'] = \APP_URL_ADDR;
@@ -63,28 +61,28 @@ class FormController extends Controller {
             if (!isset($_COOKIE['AntiCSRF-TOKEN']) || !isset($_POST['AntiCSRF-TOKEN']) ||
                     \filter_input(\INPUT_COOKIE, 'AntiCSRF-TOKEN') !== \filter_input(\INPUT_POST, 'AntiCSRF-TOKEN')) {
                 $data['CSRF-Error'] = true;
-                self::renderView('form', $navHelper, $data);
-                die();
+                $this->renderView('form', $navHelper, $data);
+                return;
             }
 
             if (empty($data['errors'])) {
                 try {
-                    $gateway->updateStudent($DBHelper->convertStudentToArray($student, 'update'));
+                    $gateway->updateStudent($gateway->convertStudentToArray($student, 'update'));
                     $data['title'] = "Измение данных прошло успешно";
-                    header("Refresh:5; url=" . \APP_URL_ADDR, true, 303);
-                    $navHelper = new NavHelper($data['host'],'edit');
+                    //header("Refresh:20; url=" . \APP_URL_ADDR, true, 303);
+                    $navHelper = new NavHelper($data['host'], 'edit');
                     self::renderView('success', $navHelper, $data);
                 } catch (\PDOException $ex) {
                     $data['fail']['message'] = "Не удалось изменить данные, пожалуйста, повторите попытку снова.";
                     $logger = Logger::getInstance();
                     $logger->log(\get_class($ex), $ex->getMessage(), $ex->getFile(), $ex->getLine());
-                    self::renderView('form', $navHelper, $data);
+                    $this->renderView('form', $navHelper, $data);
                 }
             } else {
-                self::renderView('form', $navHelper, $data);
+                $this->renderView('form', $navHelper, $data);
             }
         }
-        self::renderView('form', $navHelper, $data);
+        $this->renderView('form', $navHelper, $data);
     }
 
     /**
@@ -93,8 +91,7 @@ class FormController extends Controller {
     public function register() {
 
         $tokenHelper = new TokenHelper;
-        $DBHelper = new DBHelper;
-        $gateway = self::DbGateway();
+        $gateway = $this->DbGateway();
         $token = (isset($_COOKIE['authToken'])) ? \filter_input(\INPUT_COOKIE, 'authToken', \FILTER_SANITIZE_STRING) : '';
         $auth = new Auth($gateway);
 
@@ -102,9 +99,9 @@ class FormController extends Controller {
             $token = $tokenHelper->createAuthToken();
         } else {
             header('Location: ' . \APP_URL_ADDR . '/form/edit');
-            die();
+            return;
         }
-        
+
         $data['host'] = \APP_URL_ADDR;
         $data['title'] = "Регистрация";
         $data['legend'] = "Регистрация нового студента";
@@ -112,7 +109,7 @@ class FormController extends Controller {
         \setcookie('AntiCSRF-TOKEN', $data['AntiCSRF-TOKEN'], 0, '/');
 
         $navHelper = new NavHelper($data['host'], 'register', 'form');
-        
+
         if (!empty($_POST['fname']) && !empty($_POST['sname'])) {
 
             $validator = new StudentValidator($gateway);
@@ -131,36 +128,33 @@ class FormController extends Controller {
 
             $data['student'] = \get_object_vars($student);
 
-            $DBHelper = new \Studentslist\Helpers\DBHelper;
-
             if (!isset($_COOKIE['AntiCSRF-TOKEN']) || !isset($_POST['AntiCSRF-TOKEN']) ||
                     \filter_input(\INPUT_COOKIE, 'AntiCSRF-TOKEN') !== \filter_input(\INPUT_POST, 'AntiCSRF-TOKEN')) {
                 $data['CSRF-Error'] = true;
-                self::renderView('form', $navHelper, $data);
-                die();
+                $this->renderView('form', $navHelper, $data);
+                return;
             }
 
             if (empty($data['errors'])) {
                 try {
-                    $gateway->addStudent($DBHelper->convertStudentToArray($student, 'insert'));
+                    $gateway->addStudent($gateway->convertStudentToArray($student, 'insert'));
                     \setcookie('authToken', $token, time() + 60 * 60 * 24 * 30, '/');
                     $data['title'] = "Регистрация прошла успешно";
-                    $navHelper = new NavHelper($data['host'],'edit');
-                    header("Refresh:5; url=" . \APP_URL_ADDR, true, 303);
-                    self::renderView('success', $navHelper, $data);
-                    exit();
+                    $navHelper = new NavHelper($data['host'], 'edit');
+                    //header("Refresh:20; url=" . \APP_URL_ADDR, true, 303);
+                    $this->renderView('success', $navHelper, $data);
+                    return;
                 } catch (\PDOException $ex) {
                     $data['fail']['message'] = "Регистрация не удалась, пожалуйста, повторите попытку снова.";
                     $logger = Logger::getInstance();
                     $logger->log(\get_class($ex), $ex->getMessage(), $ex->getFile(), $ex->getLine());
-                    self::renderView('form', $navHelper, $data);
+                    $this->renderView('form', $navHelper, $data);
+                    return;
                 }
-            } else {
-                self::renderView('form', $navHelper, $data);
             }
-        } else {
-            self::renderView('form', $navHelper, $data);
-        }
+        } 
+        
+        $this->renderView('form', $navHelper, $data);
     }
 
 }

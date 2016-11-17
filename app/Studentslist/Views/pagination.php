@@ -6,7 +6,7 @@
         <li class="<?= ($paginator->currentPage == 1) ? 'active' : '' ?>">
             <a href="<?= $paginator->getLinkForPage(1) ?>"><?= 1 ?> <span class="sr-only"></span></a>
         </li>
-        <?= ($paginator->getEllipsis('right')) ? '<li class="disabled"><a href="#">…</a></li>' : '' ?>
+        <?= ($paginator->getEllipsis('right')) ? '<li class="disabled"><span>…</span></li>' : '' ?>
         <?php
         if ($paginator->pagesNum >= 3) :
             for ($i = $paginator->startPage; $i <= $paginator->visiblePages; $i++) :
@@ -20,7 +20,7 @@
             endfor;
         endif;
         ?>
-        <?= ($paginator->getEllipsis('left')) ? '<li class="disabled"><a href="#">…</a></li>' : '' ?>
+        <?= ($paginator->getEllipsis('left')) ? '<li class="disabled"><span>…</span></li>' : '' ?>
         <li class="<?= ($paginator->currentPage == $paginator->pagesNum) ? 'active' : '' ?>">
             <a href="<?= $paginator->getLinkForPage($paginator->pagesNum) ?>"><?= $paginator->pagesNum ?> <span class="sr-only"></span></a>
         </li>

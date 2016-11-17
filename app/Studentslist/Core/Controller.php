@@ -16,7 +16,7 @@ class Controller {
      * Метод получения объекта класса StudentDataGateway
      * @return StudentDataGateway
      */
-    public static function DbGateway() {
+    public function DbGateway() {
         $DB = Database::getInstance();
         return new StudentDataGateway($DB->getPDO());
     }
@@ -27,11 +27,10 @@ class Controller {
      * @param NavHelper $navHelper Хелпер, объект класса NavHelper
      * @param array $data Массив с данными для View
      */
-    public static function renderView($view, NavHelper $navHelper, $data = []) {
+    public function renderView($view, NavHelper $navHelper, $data = []) {
         ob_start();
         require_once __DIR__ . '/../Views/' . $view . '.php';
         ob_get_flush();
-        exit(0);
     }
 
     /**
@@ -42,11 +41,10 @@ class Controller {
      * @param Paginator $paginator Хелпер, объект класса Paginator
      * @param array $data Массив с данными для View
      */
-    public static function renderViewTable($view, NavHelper $navHelper, TableHelper $tableHelper, Paginator $paginator, $data = []) {
+    public function renderViewTable($view, NavHelper $navHelper, TableHelper $tableHelper, Paginator $paginator, $data = []) {
         ob_start();
         require_once __DIR__ . '/../Views/' . $view . '.php';
         ob_get_flush();
-        exit(0);
     }
 
     /**
@@ -55,11 +53,10 @@ class Controller {
      * @param NavHelper $navHelper Хелпер, объект класса NavHelper
      * @param array $data Массив с данными для View
      */
-    public static function renderErrorView($view, NavHelper $navHelper = null, $data = []) {
+    public function renderErrorView($view, NavHelper $navHelper = null, $data = []) {
         ob_start();
         require_once __DIR__ . '/../Views/errors/' . $view . '.php';
         ob_get_flush();
-        exit(0);
     }
 
 }
