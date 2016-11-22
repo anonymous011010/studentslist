@@ -69,17 +69,17 @@ class FormController extends Controller {
                 try {
                     $gateway->updateStudent($gateway->convertStudentToArray($student, 'update'));
                     $data['title'] = "Измение данных прошло успешно";
-                    //header("Refresh:20; url=" . \APP_URL_ADDR, true, 303);
+                    //header("Refresh:5; url=" . \APP_URL_ADDR, true, 303);
                     $navHelper = new NavHelper($data['host'], 'edit');
-                    self::renderView('success', $navHelper, $data);
+                    $this->renderView('success', $navHelper, $data);
+                    return;
                 } catch (\PDOException $ex) {
                     $data['fail']['message'] = "Не удалось изменить данные, пожалуйста, повторите попытку снова.";
                     $logger = Logger::getInstance();
                     $logger->log(\get_class($ex), $ex->getMessage(), $ex->getFile(), $ex->getLine());
                     $this->renderView('form', $navHelper, $data);
+                    return;
                 }
-            } else {
-                $this->renderView('form', $navHelper, $data);
             }
         }
         $this->renderView('form', $navHelper, $data);
@@ -141,7 +141,7 @@ class FormController extends Controller {
                     \setcookie('authToken', $token, time() + 60 * 60 * 24 * 30, '/');
                     $data['title'] = "Регистрация прошла успешно";
                     $navHelper = new NavHelper($data['host'], 'edit');
-                    //header("Refresh:20; url=" . \APP_URL_ADDR, true, 303);
+                    //header("Refresh:5; url=" . \APP_URL_ADDR, true, 303);
                     $this->renderView('success', $navHelper, $data);
                     return;
                 } catch (\PDOException $ex) {
@@ -152,8 +152,8 @@ class FormController extends Controller {
                     return;
                 }
             }
-        } 
-        
+        }
+
         $this->renderView('form', $navHelper, $data);
     }
 

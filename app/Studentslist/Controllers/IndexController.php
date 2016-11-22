@@ -25,7 +25,6 @@ class IndexController extends Controller {
 
         $gateway = $this->DbGateway();
 
-        
         $token = (isset($_COOKIE['authToken'])) ? \filter_input(\INPUT_COOKIE, 'authToken', \FILTER_SANITIZE_STRING) : '';
         $auth = new Auth($gateway);
 
@@ -90,7 +89,6 @@ class IndexController extends Controller {
 
             $order = (isset($_GET['order'])) ? $gateway->getOrder($_GET['order']) : 'examScore';
             $sort = (isset($_GET['sort'])) ? $gateway->getSort($_GET['sort']) : 'DESC';
-
 
             $limit = \ENTRIES_PER_PAGE;
 
