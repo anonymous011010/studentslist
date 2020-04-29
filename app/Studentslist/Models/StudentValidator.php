@@ -50,7 +50,7 @@ class StudentValidator {
      * @return string пустая строка или строка с ошибкой
      */
     public function checkEmail($email, $id) {
-        $regExp = '/^(\S[^@])+@(\S[^@])+$/ui';
+        $regExp = '/^[^@\s]+@[^@\s]+$/ui';
         if (!\preg_match_all($regExp, $email)) {
             return 'Введите корректный E-mail.';
         } elseif ($this->gateway->checkEmailExists($email)) {
